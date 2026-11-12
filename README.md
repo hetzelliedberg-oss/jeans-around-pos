@@ -1,10 +1,11 @@
 # 👖 DenimSync POS - ระบบขายหน้าร้าน คลังสินค้าแยกสาขา & Denim CRM Loyalty
 
-## 🌐 ลิงก์ระบบใช้งานจริงบน Cloud (ออนไลน์ 24 ชม.)
-- **URL กลางระบบ:** https://rain-rodent-qdsxe.ship.place/
-- **สาขาขอนแก่น:** https://rain-rodent-qdsxe.ship.place/?branch=khonkaen
-- **สาขาโคราช:** https://rain-rodent-qdsxe.ship.place/?branch=korat
-- **สาขาอุดรธานี:** https://rain-rodent-qdsxe.ship.place/?branch=udon
+## 🌐 ลิงก์ระบบใช้งานจริงบน Cloud (ออนไลน์ถาวร 24 ชม. ไม่มีวันหมดอายุ)
+- **URL กลางระบบ:** https://hetzelliedberg-oss.github.io/jeans-around-pos/
+- **สาขาขอนแก่น:** https://hetzelliedberg-oss.github.io/jeans-around-pos/?branch=khonkaen
+- **สาขาโคราช:** https://hetzelliedberg-oss.github.io/jeans-around-pos/?branch=korat
+- **สาขาอุดรธานี:** https://hetzelliedberg-oss.github.io/jeans-around-pos/?branch=udon
+- **GitHub Repo (สำหรับอัปเดตโค้ดต่อบน Mac):** https://github.com/hetzelliedberg-oss/jeans-around-pos
 
 ## 🔑 ข้อมูลเข้าสู่ระบบ (PIN)
 - **เจ้าของร้าน (Owner):** PIN `0929` (สิทธิ์เต็ม ปรับแต้ม ลบสมาชิก Reconcile สต็อก)
