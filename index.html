@@ -2273,13 +2273,13 @@
             if (spend >= DENIM_TIERS.SILVER.minSpend) return DENIM_TIERS.SILVER;
             return DENIM_TIERS.BLUE;
         }
-        const STORAGE_KEY = 'DENIMSYNC_POS_V3_REAL_DATA';
+        const STORAGE_KEY = 'DENIMSYNC_POS_V4_REAL_DATA';
         const CLOUD_BUCKET_BASE = 'https://kvdb.io/HBod6aVmHgvvY5hGVbPSJZ/';
-        const CLOUD_KV_URL = CLOUD_BUCKET_BASE + 'denimsync_pos_v3';
-        const CLOUD_BACKUP_URL = CLOUD_BUCKET_BASE + 'denimsync_pos_v3_backup';
+        const CLOUD_KV_URL = CLOUD_BUCKET_BASE + 'denimsync_pos_v4';
+        const CLOUD_BACKUP_URL = CLOUD_BUCKET_BASE + 'denimsync_pos_v4_backup';
         const CLOUD_SLIP_URL = (txId) => CLOUD_BUCKET_BASE + 'slip_' + txId;
-        const CLOUD_SHARD_URL = (ym) => CLOUD_BUCKET_BASE + 'denimsync_txs_' + ym;
-        const CLOUD_MANIFEST_URL = CLOUD_BUCKET_BASE + 'denimsync_shards_manifest';
+        const CLOUD_SHARD_URL = (ym) => CLOUD_BUCKET_BASE + 'denimsync_txs_v4_' + ym;
+        const CLOUD_MANIFEST_URL = CLOUD_BUCKET_BASE + 'denimsync_shards_manifest_v4';
 
         // 3 SPECIFIC BRANCHES
         const BRANCHES = [
@@ -2288,63 +2288,1755 @@
             { id: 'udon', name: 'สาขาอุดรธานี', short: 'UD' }
         ];
 
-        // DEFAULT PRELOADED PRODUCTS (PRESERVE ALL USER PRODUCTS 100%)
+        // DEFAULT PRELOADED PRODUCTS (EXACT KORAT STOCK FROM สต็อคโคราช 14-11.xlsx)
         const DEFAULT_PRODUCTS = [
             {
-                id: 'prod-denim-f',
-                sku: 'ฟ',
-                name: 'ฟ',
-                price: 1290,
-                barcode: 'ฟ',
-                stocks: {
-                    khonkaen: { S: 0, M: 1, L: 1, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 },
-                    korat: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 },
-                    udon: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }
-                },
-                createdAt: '2026-09-01T00:00:00.000Z',
-                updatedAt: '2026-10-22T06:15:00.000Z'
+                        "id": "prod-kr-001-ar02ขาว",
+                        "sku": "AR02ขาว",
+                        "name": "AR02ขาว",
+                        "price": 1290,
+                        "barcode": "AR02ขาว",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 2,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
             },
             {
-                id: 'prod-ab',
-                sku: 'AB',
-                name: 'AB',
-                price: 1500,
-                barcode: 'AB',
-                stocks: {
-                    khonkaen: { S: 2, M: 3, L: 5, XL: 2, '2XL': 1, '3XL': 0, '4XL': 0 },
-                    korat: { S: 0, M: 2, L: 2, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 },
-                    udon: { S: 0, M: 0, L: 0, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }
-                },
-                createdAt: '2026-09-05T00:00:00.000Z',
-                updatedAt: '2026-10-22T06:15:00.000Z'
+                        "id": "prod-kr-002-ar02ยีนส์",
+                        "sku": "AR02ยีนส์",
+                        "name": "AR02ยีนส์",
+                        "price": 1290,
+                        "barcode": "AR02ยีนส์",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 2,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
             },
             {
-                id: 'prod-d',
-                sku: 'D',
-                name: 'D',
-                price: 1290,
-                barcode: 'D',
-                stocks: {
-                    khonkaen: { S: 1, M: 2, L: 2, XL: 1, '2XL': 0, '3XL': 0, '4XL': 0 },
-                    korat: { S: 0, M: 1, L: 1, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 },
-                    udon: { S: 0, M: 1, L: 1, XL: 0, '2XL': 0, '3XL': 0, '4XL': 0 }
-                },
-                createdAt: '2026-09-05T00:00:00.000Z',
-                updatedAt: '2026-10-22T06:15:00.000Z'
+                        "id": "prod-kr-003-ar05ยีนส์",
+                        "sku": "AR05ยีนส์",
+                        "name": "AR05ยีนส์",
+                        "price": 1290,
+                        "barcode": "AR05ยีนส์",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
             },
             {
-                id: 'prod-xrp50',
-                sku: 'XRP50',
-                name: 'กางเกงยีนส์ขากระบอก ริมแดง 14oz',
-                price: 1290,
-                barcode: '885999000001',
-                stocks: {
-                    khonkaen: { S: 3, M: 5, L: 5, XL: 3, '2XL': 2, '3XL': 1, '4XL': 1 },
-                    korat: { S: 2, M: 3, L: 3, XL: 2, '2XL': 0, '3XL': 0, '4XL': 0 },
-                    udon: { S: 2, M: 3, L: 3, XL: 2, '2XL': 0, '3XL': 0, '4XL': 0 }
-                },
-                createdAt: '2026-09-08T00:00:00.000Z',
-                updatedAt: '2026-10-22T06:15:00.000Z'
+                        "id": "prod-kr-004-ar09กรม",
+                        "sku": "AR09กรม",
+                        "name": "AR09กรม",
+                        "price": 1290,
+                        "barcode": "AR09กรม",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-005-ar18",
+                        "sku": "AR18",
+                        "name": "AR18",
+                        "price": 1290,
+                        "barcode": "AR18",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 1,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-006-ar19ขาว",
+                        "sku": "AR19ขาว",
+                        "name": "AR19ขาว",
+                        "price": 1290,
+                        "barcode": "AR19ขาว",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 2,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-007-ar34เข้ม",
+                        "sku": "AR34เข้ม",
+                        "name": "AR34เข้ม",
+                        "price": 1290,
+                        "barcode": "AR34เข้ม",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-008-ar39",
+                        "sku": "AR39",
+                        "name": "AR39",
+                        "price": 1290,
+                        "barcode": "AR39",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-009-ar34ดำ",
+                        "sku": "AR34ดำ",
+                        "name": "AR34ดำ",
+                        "price": 1290,
+                        "barcode": "AR34ดำ",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-010-ar37",
+                        "sku": "AR37",
+                        "name": "AR37",
+                        "price": 1290,
+                        "barcode": "AR37",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 1,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-011-ar41",
+                        "sku": "AR41",
+                        "name": "AR41",
+                        "price": 1290,
+                        "barcode": "AR41",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-012-xrp12",
+                        "sku": "XRP12",
+                        "name": "XRP12",
+                        "price": 1290,
+                        "barcode": "XRP12",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-013-xrp15",
+                        "sku": "XRP15",
+                        "name": "XRP15",
+                        "price": 1290,
+                        "barcode": "XRP15",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-014-ar23ขาว",
+                        "sku": "AR23ขาว",
+                        "name": "AR23ขาว",
+                        "price": 1290,
+                        "barcode": "AR23ขาว",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-015-xrp17",
+                        "sku": "XRP17",
+                        "name": "XRP17",
+                        "price": 1290,
+                        "barcode": "XRP17",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 1,
+                                                "2XL": 1,
+                                                "3XL": 2,
+                                                "4XL": 1
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-016-xrp49",
+                        "sku": "XRP49",
+                        "name": "XRP49",
+                        "price": 1290,
+                        "barcode": "XRP49",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 0,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-017-xrp11",
+                        "sku": "XRP11",
+                        "name": "XRP11",
+                        "price": 1290,
+                        "barcode": "XRP11",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-018-xrp14",
+                        "sku": "XRP14",
+                        "name": "XRP14",
+                        "price": 1290,
+                        "barcode": "XRP14",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-019-xrp23",
+                        "sku": "XRP23",
+                        "name": "XRP23",
+                        "price": 1290,
+                        "barcode": "XRP23",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-020-xrp46",
+                        "sku": "XRP46",
+                        "name": "XRP46",
+                        "price": 1290,
+                        "barcode": "XRP46",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 1,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-021-xrp47",
+                        "sku": "XRP47",
+                        "name": "XRP47",
+                        "price": 1290,
+                        "barcode": "XRP47",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-022-ar38",
+                        "sku": "AR38",
+                        "name": "AR38",
+                        "price": 1290,
+                        "barcode": "AR38",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 1,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 1
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-023-xrp55",
+                        "sku": "XRP55",
+                        "name": "XRP55",
+                        "price": 1290,
+                        "barcode": "XRP55",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 2,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-024-xrp02",
+                        "sku": "XRP02",
+                        "name": "XRP02",
+                        "price": 1290,
+                        "barcode": "XRP02",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-025-xrp53",
+                        "sku": "XRP53",
+                        "name": "XRP53",
+                        "price": 1290,
+                        "barcode": "XRP53",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 1,
+                                                "L": 1,
+                                                "XL": 2,
+                                                "2XL": 1,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-026-xrp56",
+                        "sku": "XRP56",
+                        "name": "XRP56",
+                        "price": 1290,
+                        "barcode": "XRP56",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-027-xrp57",
+                        "sku": "XRP57",
+                        "name": "XRP57",
+                        "price": 1290,
+                        "barcode": "XRP57",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 2,
+                                                "2XL": 1,
+                                                "3XL": 2,
+                                                "4XL": 1
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-028-xrp51",
+                        "sku": "XRP51",
+                        "name": "XRP51",
+                        "price": 1290,
+                        "barcode": "XRP51",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-029-xrp62",
+                        "sku": "XRP62",
+                        "name": "XRP62",
+                        "price": 1290,
+                        "barcode": "XRP62",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-030-ar44",
+                        "sku": "AR44",
+                        "name": "AR44",
+                        "price": 1290,
+                        "barcode": "AR44",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-031-xrp48",
+                        "sku": "XRP48",
+                        "name": "XRP48",
+                        "price": 1290,
+                        "barcode": "XRP48",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-032-xrp63",
+                        "sku": "XRP63",
+                        "name": "XRP63",
+                        "price": 1290,
+                        "barcode": "XRP63",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 3,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-033-xrp65",
+                        "sku": "XRP65",
+                        "name": "XRP65",
+                        "price": 1290,
+                        "barcode": "XRP65",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 2,
+                                                "3XL": 1,
+                                                "4XL": 1
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-034-xrp66",
+                        "sku": "XRP66",
+                        "name": "XRP66",
+                        "price": 1290,
+                        "barcode": "XRP66",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-035-ar34อ่อน",
+                        "sku": "AR34อ่อน",
+                        "name": "AR34อ่อน",
+                        "price": 1290,
+                        "barcode": "AR34อ่อน",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-036-xrp67ฟ้า",
+                        "sku": "XRP67ฟ้า",
+                        "name": "XRP67ฟ้า",
+                        "price": 1290,
+                        "barcode": "XRP67ฟ้า",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 1,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-037-xrp67เข้ม",
+                        "sku": "XRP67เข้ม",
+                        "name": "XRP67เข้ม",
+                        "price": 1290,
+                        "barcode": "XRP67เข้ม",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 1
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-038-xrp70ฟ้า",
+                        "sku": "XRP70ฟ้า",
+                        "name": "XRP70ฟ้า",
+                        "price": 1290,
+                        "barcode": "XRP70ฟ้า",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 1,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-039-xrp70ดำ",
+                        "sku": "XRP70ดำ",
+                        "name": "XRP70ดำ",
+                        "price": 1290,
+                        "barcode": "XRP70ดำ",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-040-xrp69ยีนส์",
+                        "sku": "XRP69ยีนส์",
+                        "name": "XRP69ยีนส์",
+                        "price": 1290,
+                        "barcode": "XRP69ยีนส์",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 1,
+                                                "XL": 3,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-041-xrp69ดำ",
+                        "sku": "XRP69ดำ",
+                        "name": "XRP69ดำ",
+                        "price": 1290,
+                        "barcode": "XRP69ดำ",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 2
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-042-xrp68ฟ้า",
+                        "sku": "XRP68ฟ้า",
+                        "name": "XRP68ฟ้า",
+                        "price": 1290,
+                        "barcode": "XRP68ฟ้า",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 1,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-043-xrp68ดำ",
+                        "sku": "XRP68ดำ",
+                        "name": "XRP68ดำ",
+                        "price": 1290,
+                        "barcode": "XRP68ดำ",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 3,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 1
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-044-ja001ฟ้า",
+                        "sku": "JA001ฟ้า",
+                        "name": "JA001ฟ้า",
+                        "price": 1290,
+                        "barcode": "JA001ฟ้า",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-045-ja002เหลือง",
+                        "sku": "JA002เหลือง",
+                        "name": "JA002เหลือง",
+                        "price": 1290,
+                        "barcode": "JA002เหลือง",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 1,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
+            },
+            {
+                        "id": "prod-kr-046-xrp01",
+                        "sku": "XRP01",
+                        "name": "XRP01",
+                        "price": 1290,
+                        "barcode": "XRP01",
+                        "stocks": {
+                                    "khonkaen": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    },
+                                    "korat": {
+                                                "S": 0,
+                                                "M": 2,
+                                                "L": 2,
+                                                "XL": 2,
+                                                "2XL": 2,
+                                                "3XL": 2,
+                                                "4XL": 3
+                                    },
+                                    "udon": {
+                                                "S": 0,
+                                                "M": 0,
+                                                "L": 0,
+                                                "XL": 0,
+                                                "2XL": 0,
+                                                "3XL": 0,
+                                                "4XL": 0
+                                    }
+                        },
+                        "createdAt": "2026-11-15T01:19:05.000Z",
+                        "updatedAt": "2026-11-15T01:19:05.000Z"
             }
         ];
 
@@ -2426,9 +4118,9 @@
                 {
                     id: 'log-init-1',
                     action: 'RECEIVE_STOCK',
-                    details: 'สต็อกสินค้าเริ่มต้น: ฟ (M:1, L:1) ประจำสาขาขอนแก่น',
-                    branchId: 'khonkaen',
-                    branchName: 'สาขาขอนแก่น',
+                    details: 'เริ่มระบบใหม่ด้วยสต็อกโคราชตามไฟล์: 46 รุ่น (326 ตัว)',
+                    branchId: 'korat',
+                    branchName: 'สาขาโคราช',
                     dateISO: new Date().toISOString()
                 }
             ],
