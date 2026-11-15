@@ -46,7 +46,9 @@
             margin: 0;
             padding: 0;
             overflow: hidden;
+            overflow-x: hidden;
             width: 100%;
+            max-width: 100vw;
         }
         body {
             display: flex;
@@ -191,59 +193,61 @@
     </div>
 
     <!-- MAIN APP HEADER -->
-    <header class="denim-header text-white shadow-xl z-30 flex-none border-b border-slate-700">
-        <div class="w-full px-3 sm:px-4 lg:px-6">
-            <!-- Row 1: Brand & User Controls -->
-            <div class="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 py-1.5 sm:py-2 border-b border-slate-800">
+    <header class="denim-header text-white shadow-xl z-30 flex-none border-b border-slate-700 w-full max-w-full overflow-x-hidden">
+        <div class="w-full px-2.5 sm:px-4 lg:px-6">
+            <!-- Row 1: Brand & User Controls (100% responsive stack on mobile, side-by-side on desktop) -->
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 py-2 border-b border-slate-800 w-full">
                 <!-- Brand & Cloud Sync -->
-                <div class="flex items-center gap-2.5">
-                    <div class="bg-blue-600 p-2 rounded-xl text-white shadow border border-blue-400 flex items-center justify-center">
-                        <span class="text-xl">👖</span>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h1 class="text-base sm:text-lg font-black tracking-tight leading-none text-white">DenimSync <span class="text-sky-400 text-xs px-1.5 py-0.5 rounded bg-sky-950 border border-sky-500/40 font-mono">PRO</span></h1>
-                            <button onclick="manualSyncNow()" id="cloud-badge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-black bg-emerald-950 text-emerald-300 border border-emerald-500/50 hover:bg-emerald-900 transition cursor-pointer" title="คลิกเพื่อซิงค์ข้อมูลคลาวด์ 3 สาขาทันที">
-                                <span id="cloud-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                                <span id="cloud-badge-text">☁️ ซิงค์คลาวด์ 3 สาขา</span>
-                            </button>
+                <div class="flex items-center justify-between gap-2 w-full lg:w-auto min-w-0">
+                    <div class="flex items-center gap-2 min-w-0">
+                        <div class="bg-blue-600 p-1.5 sm:p-2 rounded-xl text-white shadow border border-blue-400 flex items-center justify-center flex-none">
+                            <span class="text-lg sm:text-xl">👖</span>
                         </div>
-                        <p class="text-[10px] text-slate-300 font-bold tracking-wider mt-0.5">
-                            ขอนแก่น • โคราช • อุดรธานี
-                        </p>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <h1 class="text-sm sm:text-lg font-black tracking-tight leading-none text-white">DenimSync <span class="text-sky-400 text-[10px] sm:text-xs px-1.5 py-0.5 rounded bg-sky-950 border border-sky-500/40 font-mono">PRO</span></h1>
+                            </div>
+                            <p class="text-[10px] text-slate-300 font-bold tracking-wider mt-0.5 truncate">
+                                ขอนแก่น • โคราช • อุดรธานี
+                            </p>
+                        </div>
                     </div>
+                    <button onclick="manualSyncNow()" id="cloud-badge" class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-black bg-emerald-950 text-emerald-300 border border-emerald-500/50 hover:bg-emerald-900 transition cursor-pointer flex-none max-w-[175px] sm:max-w-none truncate" title="คลิกเพื่อซิงค์ข้อมูลคลาวด์ 3 สาขาทันที">
+                        <span id="cloud-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-none"></span>
+                        <span id="cloud-badge-text" class="truncate">☁️ ซิงค์คลาวด์</span>
+                    </button>
                 </div>
 
-                <!-- Status & Actions -->
-                <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap justify-end">
+                <!-- Status & Actions (cleanly wrapped on mobile, never clipped off right edge) -->
+                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 w-full lg:w-auto justify-start lg:justify-end">
                     <!-- Branch Selector -->
-                    <div class="relative">
-                        <select id="branch-select" onchange="changeBranch(this.value)" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/50 text-xs sm:text-sm font-black rounded-xl px-2.5 py-1.5 outline-none shadow cursor-pointer transition flex items-center pr-7 appearance-none">
+                    <div class="relative flex-none">
+                        <select id="branch-select" onchange="changeBranch(this.value)" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-400/50 text-[11px] sm:text-sm font-black rounded-xl px-2 sm:px-2.5 py-1.5 outline-none shadow cursor-pointer transition pr-6 appearance-none">
                             <option value="khonkaen">📍 สาขาขอนแก่น</option>
                             <option value="korat">📍 สาขาโคราช</option>
                             <option value="udon">📍 สาขาอุดรธานี</option>
                         </select>
-                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-amber-400 text-xs">▼</div>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-amber-400 text-[10px]">▼</div>
                     </div>
 
                     <!-- Shift Opening Cash -->
-                    <button onclick="openShiftModal()" id="btn-shift-status" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 px-2.5 py-1.5 rounded-xl text-xs font-black transition flex items-center gap-1.5 shadow-sm whitespace-nowrap" title="บันทึกเงินสดเงินทอนก่อนเปิดกะ">
+                    <button onclick="openShiftModal()" id="btn-shift-status" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-400/40 px-2 py-1.5 rounded-xl text-[11px] sm:text-xs font-black transition flex items-center gap-1 shadow-sm whitespace-nowrap" title="บันทึกเงินสดเงินทอนก่อนเปิดกะ">
                         <span>💵</span> <span id="shift-status-text">เงินทอน: ฿1,000</span>
                     </button>
 
                     <!-- Logged In User Status Badge & Logout Button -->
-                    <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700 px-2.5 py-1.5 rounded-xl shadow-sm">
-                        <span id="user-badge-icon" class="text-sm">👑</span>
-                        <span id="user-badge-name" class="text-xs font-black text-slate-200 truncate max-w-[120px]">เจ้าของร้าน (Owner)</span>
-                        <span id="user-badge-role" class="text-[9px] bg-amber-400 text-slate-950 px-1.5 py-0.2 rounded font-black">Owner</span>
-                        <button onclick="logoutToLoginGate()" class="ml-1 px-2 py-0.5 bg-rose-600/80 hover:bg-rose-600 text-white rounded-lg text-[10px] font-black transition cursor-pointer flex items-center gap-0.5" title="ออกจากระบบ / ล็อกหน้าจอ">
+                    <div class="flex items-center gap-1 bg-slate-800/90 border border-slate-700 px-2 py-1 rounded-xl shadow-sm max-w-full">
+                        <span id="user-badge-icon" class="text-xs sm:text-sm flex-none">👑</span>
+                        <span id="user-badge-name" class="text-[11px] sm:text-xs font-black text-slate-200 truncate max-w-[95px] sm:max-w-[130px]">เจ้าของร้าน</span>
+                        <span id="user-badge-role" class="text-[9px] bg-amber-400 text-slate-950 px-1 py-0.2 rounded font-black flex-none">Owner</span>
+                        <button onclick="logoutToLoginGate()" class="ml-0.5 px-1.5 py-0.5 bg-rose-600/80 hover:bg-rose-600 text-white rounded-lg text-[10px] font-black transition cursor-pointer flex items-center gap-0.5 flex-none" title="ออกจากระบบ / ล็อกหน้าจอ">
                             <span>🔒</span> <span>ออก</span>
                         </button>
                     </div>
 
                     <!-- Branch Links -->
-                    <button onclick="openBranchLinksModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-xl font-black text-xs shadow transition flex items-center gap-1 whitespace-nowrap cursor-pointer">
-                        <span>🔗</span> <span>ลิงก์ 3 สาขา</span>
+                    <button onclick="openBranchLinksModal()" class="bg-blue-600 hover:bg-blue-500 text-white px-2.5 py-1.5 rounded-xl font-black text-[11px] sm:text-xs shadow transition flex items-center gap-1 whitespace-nowrap cursor-pointer">
+                        <span>🔗</span> <span class="hidden sm:inline">ลิงก์ 3 สาขา</span><span class="sm:hidden">3 สาขา</span>
                     </button>
                 </div>
             </div>
@@ -288,8 +292,18 @@
         <!-- ========================================== -->
         <div id="view-pos" class="flex-grow flex flex-col md:flex-row w-full h-full overflow-y-auto md:overflow-hidden overflow-x-hidden">
             
+            <!-- Mobile Quick Switcher (Products <-> Cart) -->
+            <div class="md:hidden sticky top-0 z-30 bg-slate-900/95 backdrop-blur px-2.5 py-2 flex gap-2 border-b border-slate-700 flex-none">
+                <button type="button" onclick="document.getElementById('pos-catalog-section').scrollIntoView({behavior:'smooth'})" class="flex-1 py-1.5 bg-blue-600 text-white rounded-xl text-xs font-black flex items-center justify-center gap-1 shadow">
+                    <span>👖</span> <span>เลือกสินค้า</span>
+                </button>
+                <button type="button" onclick="document.getElementById('pos-cart-section').scrollIntoView({behavior:'smooth'})" class="flex-1 py-1.5 bg-emerald-600 text-white rounded-xl text-xs font-black flex items-center justify-center gap-1 shadow">
+                    <span>🛒</span> <span>ไปตะกร้า / คิดเงิน</span>
+                </button>
+            </div>
+
             <!-- LEFT: Products Catalog -->
-            <div class="flex-none md:flex-grow flex flex-col p-2.5 sm:p-4 w-full md:w-3/5 lg:w-2/3 h-auto md:h-full md:overflow-y-auto bg-slate-100">
+            <div id="pos-catalog-section" class="flex-none md:flex-grow flex flex-col p-2.5 sm:p-4 w-full md:w-3/5 lg:w-2/3 h-auto md:h-full md:overflow-y-auto bg-slate-100">
                 
                 <!-- Search & Camera Bar -->
                 <div class="mb-3 bg-white p-2.5 sm:p-3 rounded-2xl shadow-sm border border-slate-300 flex flex-col sm:flex-row gap-2">
@@ -346,7 +360,7 @@
             </div>
 
             <!-- RIGHT: Cart & CRM Checkout Panel -->
-            <div class="w-full md:w-2/5 lg:w-1/3 bg-white md:border-l border-t-2 md:border-t-0 border-slate-300 flex flex-col shadow-2xl z-20 flex-none h-auto md:h-full md:overflow-y-auto">
+            <div id="pos-cart-section" class="w-full md:w-2/5 lg:w-1/3 bg-white md:border-l border-t-2 md:border-t-0 border-slate-300 flex flex-col shadow-2xl z-20 flex-none h-auto md:h-full md:overflow-y-auto pb-6 md:pb-0">
                 
                 <!-- Section 1: Customer CRM & Royalty Points & LINE OA Integration -->
                 <div class="p-3 bg-gradient-to-br from-indigo-50/90 to-slate-50 border-b border-indigo-100 flex-none space-y-2">
