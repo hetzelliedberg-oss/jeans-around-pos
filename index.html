@@ -3465,7 +3465,7 @@
                                                 "M": 2,
                                                 "L": 2,
                                                 "XL": 2,
-                                                "2XL": 2,
+                                                "2XL": 1,
                                                 "3XL": 2,
                                                 "4XL": 2
                                     },
@@ -5298,17 +5298,32 @@
                         const localIsUninitialized = localLast === '1970-01-01T00:00:00.000Z';
 
                         if (force || remoteIsNewer || localIsUninitialized) {
-                            // 1. PRODUCTS MERGE
+                            // 1. PRODUCTS MERGE (Per-branch branchUpdatedAt merge prevents concurrent branch overwrites)
                             if (Array.isArray(remote.products) && remote.products.length > 0) {
-                                if (remoteIsNewer || localIsUninitialized) {
-                                    const remoteIds = new Set(remote.products.map(p => p.id));
-                                    const localOnly = (window.app.products || []).filter(p => p && p.id && !remoteIds.has(p.id));
-                                    window.app.products = [...remote.products, ...localOnly];
-                                } else {
-                                    const localIds = new Set((window.app.products || []).map(p => p.id));
-                                    const remoteOnly = remote.products.filter(p => p && p.id && !localIds.has(p.id));
-                                    window.app.products = [...(window.app.products || []), ...remoteOnly];
-                                }
+                                const localById = new Map((window.app.products || []).filter(p => p && p.id).map(p => [p.id, p]));
+                                const merged = remote.products.map(rp => {
+                                    if (!rp || !rp.id) return rp;
+                                    const lp = localById.get(rp.id);
+                                    if (!lp || localIsUninitialized) return rp;
+                                    const base = (remoteIsNewer || force) ? JSON.parse(JSON.stringify(rp)) : JSON.parse(JSON.stringify(lp));
+                                    base.stocks = base.stocks || {};
+                                    base.branchUpdatedAt = base.branchUpdatedAt || {};
+                                    BRANCHES.forEach(b => {
+                                        const rTime = new Date(rp.branchUpdatedAt?.[b.id] || rp.updatedAt || 0).getTime();
+                                        const lTime = new Date(lp.branchUpdatedAt?.[b.id] || lp.updatedAt || 0).getTime();
+                                        if (lTime > rTime && lp.stocks?.[b.id]) {
+                                            base.stocks[b.id] = JSON.parse(JSON.stringify(lp.stocks[b.id]));
+                                            base.branchUpdatedAt[b.id] = lp.branchUpdatedAt?.[b.id] || lp.updatedAt;
+                                        } else if ((rTime >= lTime || remoteIsNewer || force) && rp.stocks?.[b.id]) {
+                                            base.stocks[b.id] = JSON.parse(JSON.stringify(rp.stocks[b.id]));
+                                            base.branchUpdatedAt[b.id] = rp.branchUpdatedAt?.[b.id] || rp.updatedAt;
+                                        }
+                                    });
+                                    return base;
+                                });
+                                const remoteIds = new Set(remote.products.map(p => p && p.id).filter(Boolean));
+                                const localOnly = (window.app.products || []).filter(p => p && p.id && !remoteIds.has(p.id));
+                                window.app.products = [...merged, ...localOnly];
                             }
 
                             // 2. TRANSACTIONS MERGE (UNION BY ID - NEVER DROP ANY BILL)
@@ -7241,6 +7256,16 @@
                 cashChangeVal = Math.max(0, given - finalTotal);
             }
 
+            if (pm === 'PROMPTPAY' && !currentSlipBase64) {
+                if (!isOwner()) {
+                    alert("⚠️ ชำระแบบโอนเงิน (PromptPay) กรุณาถ่ายรูปหรือแนบสลิปโอนเงินก่อนกดบันทึกบิลครับ!");
+                    showToast("กรุณาแนบรูปสลิปโอนเงินก่อนบันทึกบิล!", true);
+                    return;
+                } else if (!confirm("⚠️ ยังไม่ได้แนบรูปสลิปโอนเงิน (สิทธิ์ Owner) ต้องการบันทึกบิลโดยไม่มีรูปสลิปใช่หรือไม่?")) {
+                    return;
+                }
+            }
+
             const branchObj = getBranchObj();
             const phone = (document.getElementById('cust-phone').value || '').trim();
             const name = (document.getElementById('cust-name').value || '').trim() || 'ลูกค้าหน้าร้าน';
@@ -7256,12 +7281,16 @@
                 }
             }
 
-            // Cut stock in current branch
+            // Cut stock in current branch & stamp branchUpdatedAt
+            const saleNowISO = new Date().toISOString();
             window.app.cart.forEach(item => {
                 const p = window.app.products.find(x => x.id === item.productId);
                 if (p && p.stocks && p.stocks[branchObj.id]) {
                     const cur = parseInt(p.stocks[branchObj.id][item.size] || 0);
                     p.stocks[branchObj.id][item.size] = Math.max(0, cur - item.qty);
+                    p.branchUpdatedAt = p.branchUpdatedAt || {};
+                    p.branchUpdatedAt[branchObj.id] = saleNowISO;
+                    p.updatedAt = saleNowISO;
                 }
             });
 
@@ -7975,6 +8004,10 @@
         }
 
         function editProductModal(id) {
+            if (!isOwner() && !canAddProduct()) {
+                denyStaffAction('แก้ไขสต็อกสินค้าโดยตรง (เฉพาะ Owner หรือผู้ดูแลสต็อกเท่านั้น)');
+                return;
+            }
             const p = window.app.products.find(x => x.id === id);
             if (!p) return;
             editingProdId = id;
@@ -8090,6 +8123,22 @@
                     }
                 }
 
+                // Anti-fraud guard: non-owner staff cannot reduce stock directly via edit modal
+                if (!isOw) {
+                    for (const b of BRANCHES) {
+                        const oldB = p.stocks?.[b.id] || {};
+                        const newB = tempModalBranchStocks[b.id] || {};
+                        for (const sz of SIZES) {
+                            const oldQ = parseInt(oldB[sz] || 0);
+                            const newQ = parseInt(newB[sz] || 0);
+                            if (newQ < oldQ) {
+                                denyStaffAction('ลดจำนวนสต็อกสินค้าโดยตรง (ห้ามลดสต็อกเอง การตัดสต็อกต้องผ่านการเปิดบิลขาย โอนย้ายสาขา หรือให้ Owner ปรับยอดเท่านั้น)');
+                                return;
+                            }
+                        }
+                    }
+                }
+
                 // Calculate stock difference for audit
                 const staffBranch = isOw ? window.app.currentBranch : (window.app.currentUser?.branch || window.app.currentBranch);
                 const oldBranchStock = p.stocks?.[staffBranch] || {};
@@ -8111,8 +8160,15 @@
                 if (currentProductImageBase64 !== null) {
                     p.image = currentProductImageBase64 || null;
                 }
+                const nowEditISO = new Date().toISOString();
+                p.branchUpdatedAt = p.branchUpdatedAt || {};
+                if (isOw) {
+                    BRANCHES.forEach(b => { p.branchUpdatedAt[b.id] = nowEditISO; });
+                } else {
+                    p.branchUpdatedAt[staffBranch] = nowEditISO;
+                }
                 p.stocks = JSON.parse(JSON.stringify(tempModalBranchStocks));
-                p.updatedAt = new Date().toISOString();
+                p.updatedAt = nowEditISO;
                 writeAuditLog('EDIT_STOCK', `[${isOw ? 'OWNER' : 'STAFF'}] ปรับสต็อก ${sku} (${name}) สาขา ${getBranchObj(staffBranch).name}: ${diffStr} โดย ${window.app.currentUser?.name || 'ผู้ใช้งาน'}`);
             } else {
                 if (!isOw && !canAddProduct()) {
@@ -8225,6 +8281,11 @@
             p.stocks[from][sz] = sourceAvail - qty;
             if (!p.stocks[to]) p.stocks[to] = {};
             p.stocks[to][sz] = (parseInt(p.stocks[to][sz]) || 0) + qty;
+            const nowTrISO = new Date().toISOString();
+            p.branchUpdatedAt = p.branchUpdatedAt || {};
+            p.branchUpdatedAt[from] = nowTrISO;
+            p.branchUpdatedAt[to] = nowTrISO;
+            p.updatedAt = nowTrISO;
 
             const fromName = getBranchObj(from).name;
             const toName = getBranchObj(to).name;
@@ -10039,9 +10100,13 @@
                 // Update product in app state
                 const prod = (window.app.products || []).find(p => p.id === it.productId);
                 if (prod) {
+                    const nowAuditISO = new Date().toISOString();
                     prod.stocks = prod.stocks || {};
                     prod.stocks[branchId] = prod.stocks[branchId] || {};
                     prod.stocks[branchId][it.size] = it.physicalQty;
+                    prod.branchUpdatedAt = prod.branchUpdatedAt || {};
+                    prod.branchUpdatedAt[branchId] = nowAuditISO;
+                    prod.updatedAt = nowAuditISO;
                 }
             });
 
